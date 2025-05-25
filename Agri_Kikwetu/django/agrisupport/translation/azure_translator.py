@@ -1,6 +1,6 @@
 import requests
 from django.conf import settings
-from translation.language_codes import NLLB_LANG_CODES, AZURE_LANG_CODES  # ✅ Import both NLLB and Azure-supported languages
+from translation.language_codes import NLLB_LANG_CODES, AZURE_LANG_CODES  #  Import both NLLB and Azure-supported languages
 
 
 class AzureTranslator:

@@ -121,7 +121,7 @@ def handle_translation_and_intent(request):
             image_response = f"Detected disease: {predicted_class_name}."
 
             # Enhance with OpenAI insights
-            openai_input = f"This is a plant disease prediction result: {predicted_class_name}. Provide more insights.Your output should sound natural and human-like."
+            openai_input = f"This is a plant disease prediction result: {predicted_class_name}. Provide more insights.Your output should sound natural and human-like. use no more than 50 words."
             openai_response = get_openai_response(openai_input)
             image_response += f"\n\n{openai_response}"
             final_response += f"\n\n{image_response}" if final_response else image_response
