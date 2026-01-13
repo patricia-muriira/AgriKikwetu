@@ -13,8 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 # OpenAI settings
 openai.api_key = settings.OPENAI_API_KEY
-openai.api_base = settings.OPENAI_API_ENDPOINT  # Azure OpenAI endpoint
-openai.api_type = settings.OPENAI_API_TYPE  # Should be 'azure'
+openai.api_base = settings.OPENAI_API_ENDPOINT  
+openai.api_type = settings.OPENAI_API_TYPE  
 openai.api_version = settings.OPENAI_API_VERSION  
 
 client = AzureOpenAI(
@@ -26,18 +26,19 @@ client = AzureOpenAI(
 def get_openai_response(user_input):
     try:
         response = client.chat.completions.create(
-            model=settings.OPENAI_DEPLOYMENT_NAME,  # this is your deployment name
+            model=settings.OPENAI_DEPLOYMENT_NAME,  
             messages=[{"role": "user", "content": user_input}],
             max_completion_tokens=1500
         )
-        print("🔍 RAW Azure Response:", response)  # Add this line for debugging
+        print("RAW Azure Response:", response)  
         return response.choices[0].message.content.strip()
     except Exception as e:
-        print(f"💥 Azure OpenAI Error: {e}")
+        print(f"Azure OpenAI Error: {e}")
         return "Sorry, I couldn't process your request right now."
 
 
 # Load the pre-trained model globally.
+
 MODEL_PATH = 'C:\\Users\\HP\\Desktop\\Agri_Kikwetu\\models'
 model = tf.saved_model.load(MODEL_PATH)
 predict_fn = model.signatures["serving_default"]
@@ -60,7 +61,7 @@ class_names = [
 
 # View for uploading images for plant disease prediction
 class ImageUploadView(APIView):
-    parser_classes = (MultiPartParser, FormParser)  # Handle file uploads
+    parser_classes = (MultiPartParser, FormParser) 
 
     def post(self, request, *args, **kwargs):
         serializer = PlantImageSerializer(data=request.data)
@@ -147,7 +148,7 @@ def chat_with_bot(request):
             return JsonResponse({'response': response_text})  # Send back the OpenAI response
         
         else:
-            # If no message was provided, return an error
+            # If no message was provided, return a message error
             return JsonResponse({'error': 'No message provided'}, status=400)
 
     # If the request method is not POST, return a method error
