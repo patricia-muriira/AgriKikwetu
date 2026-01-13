@@ -1,6 +1,6 @@
 import requests
 from django.conf import settings
-from translation.language_codes import NLLB_LANG_CODES, AZURE_LANG_CODES  #  Import both NLLB and Azure-supported languages
+from translation.language_codes import NLLB_LANG_CODES, AZURE_LANG_CODES  
 
 
 class AzureTranslator:
@@ -31,6 +31,7 @@ class AzureTranslator:
             return "unknown"
 
     # Translate from any language to English, unless handled by NLLB
+    #User query is translated from original language to English for system processing
     def translate_to_english_azure(self, text, source_language=None):
         if not source_language:
             source_language = self.detect_language(text)
@@ -39,7 +40,7 @@ class AzureTranslator:
             print("No source language detected.")
             return "Sorry, translation failed.", None
 
-        # Check if the language is handled by NLLB (skip Azure translation if so)
+        # Check if the language is handled by Meta NLLB (skip Azure translation if so)
         if source_language.lower() in NLLB_LANG_CODES:
             print(f"Skipping Azure translation for '{source_language}' (handled by NLLB)")
             return None, None
@@ -64,6 +65,7 @@ class AzureTranslator:
             return "Sorry, translation failed.", None
 
     # Translate from English to any target language
+    #System response is translated back to user's original language
     def translate_from_english_azure(self, text, target_language):
         if target_language.lower() in AZURE_LANG_CODES:
             target_language_code = AZURE_LANG_CODES[target_language.lower()]
