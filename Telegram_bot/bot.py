@@ -18,7 +18,7 @@ async def funfact(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     help_text = (
-        "🌱 *AgriBot Commands:*\n"
+        " *AgriBot Commands:*\n"
         "/tip - Get a useful farming tip\n"
         "/funfact - Learn a fun farming fact\n"
         "/help - Show this help message\n\n"
@@ -33,7 +33,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 
-# Your Django backend URL
+# Django backend URL
 DJANGO_BACKEND_URL = os.getenv("DJANGO_BACKEND_URL")
 
 # Set up logging
