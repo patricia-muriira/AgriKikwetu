@@ -1,4 +1,4 @@
-# Multilingual Agri-Support & Crop Disease Detection Bot
+# Multilingual Agri-Support & Crop Disease Detection System With Telegram Bot Integration
 
 An advanced Django-based backend for an AI-powered agricultural assistant. This system provides farmers with **real-time disease detection**, **localized weather forecasts**, and **tailored farming advice**. 
 By integrating **Azure Translate** and **NLLB**, it bridges the language gap for rural communities in Kenya and beyond.
