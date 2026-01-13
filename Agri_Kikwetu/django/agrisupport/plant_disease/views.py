@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Azure OpenAI settings
 openai.api_key = settings.OPENAI_API_KEY
-openai.api_base = settings.OPENAI_API_ENDPOINT  # Azure OpenAI endpoint
+openai.api_base = settings.OPENAI_API_ENDPOINT  
 openai.api_type = settings.OPENAI_API_TYPE  
 openai.api_version = settings.OPENAI_API_VERSION  
 
@@ -30,10 +30,10 @@ def get_openai_response(user_input):
             messages=[{"role": "user", "content": user_input}],
             max_completion_tokens=1500
         )
-        print("🔍 RAW Azure Response:", response)  
+        print("RAW Azure Response:", response)  
         return response.choices[0].message.content.strip()
     except Exception as e:
-        print(f"💥 Azure OpenAI Error: {e}")
+        print(f"Azure OpenAI Error: {e}")
         return "Sorry, I couldn't process your request right now."
 
 # def get_openai_response(user_input):
@@ -46,7 +46,8 @@ def get_openai_response(user_input):
 #             ],
 #             max_completion_tokens=1000  # Reduced for faster, safer responses
 #         )
-#         print("🔍 RAW Azure Response:", response)  # Debugging the full response structure
+# #Full response structure
+#         print("RAW Azure Response:", response)  
 
         # # Validate response structure and content
         # if "choices" in response and len(response["choices"]) > 0:
@@ -57,17 +58,17 @@ def get_openai_response(user_input):
         # return "Sorry, I couldn't process your request right now."
 
     # except Exception as e:
-    #     print(f"💥 Azure OpenAI Error: {e}")
+    #     print(f" Azure OpenAI Error: {e}")
     #     return "Sorry, I couldn't process your request right now."
 
 
 
-# Load the pre-trained model globally.
+# Load the pre-trained model globally
 MODEL_PATH = 'C:\\Users\\HP\\Desktop\\Project\\Agri_Kikwetu\\models'
 model = tf.saved_model.load(MODEL_PATH)
 predict_fn = model.signatures["serving_default"]
 
-# Defining the class names
+# Defining the crop disease class names
 class_names = [
     "Apple___Apple_scab", "Apple___Black_rot", "Apple___Cedar_apple_rust", "Apple___healthy",
     "Blueberry___healthy", "Cherry_(including_sour)___Powdery_mildew", "Cherry_(including_sour)___healthy",
@@ -128,7 +129,7 @@ class ImageUploadView(APIView):
 
 # View for getting weather information
 def get_weather(request):
-    city = request.GET.get('city', 'Nairobi')  # Default to Nairobi if no city is provided
+    city = request.GET.get('city', 'Nairobi')  # Default is Nairobi if no city is provided
     weatherkey = settings.WEATHER_API_KEY  
     url = f"http://api.weatherapi.com/v1/current.json?key={weatherkey}&q={city}"
 
@@ -160,10 +161,8 @@ def get_weather(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 # Text-based plant disease identification using OpenAI
-def identify_disease(user_input):
-    """
-    This function handles disease-related queries via text using Azure OpenAI.
-    """
+def identify_disease(user_input)
+    #This function handles disease-related queries via text using Azure OpenAI.
     prompt = f"A farmer asked this about their crops: '{user_input}'. Provide a helpful, natural-sounding response assuming the user is describing plant disease symptoms. Your response should be no more than 50 words"
     
     try:
@@ -173,6 +172,7 @@ def identify_disease(user_input):
         return f"Sorry, I couldn’t understand the plant issue right now. Error: {str(e)}"
     
 def get_farming_advice(user_input):
+    #This function handles other farming related queries 
     prompt = (
             f"The user asked the following farming-related question: \"{user_input}\". "
             "Respond in a natural, helpful tone. Be concise but informative. Use point-form if necessary. "
@@ -185,9 +185,8 @@ def get_farming_advice(user_input):
         return "Sorry, I couldn't provide farming advice at the moment."
     
 def generic(user_input):
-    """
-    This function handles generic conversations using Azure OpenAI.
-    """
+    #This function handles generic conversations using Azure OpenAI.
+    
     prompt = f"The user said: '{user_input}'. Respond in a friendly, conversational manner.Identify yourself as AGRI-KIKWETU bot, a helpful assistant for farmers in Kenya. Provide a natural-sounding response.If asked who created you, say Patricia Muriira, a Kenyan software engineer, and that you are a project of the Agri-Kikwetu initiative. Your response should be no more than 50 words." 
     
     try:
@@ -200,15 +199,15 @@ def generic(user_input):
 @csrf_exempt
 def chat_with_bot(request):
     if request.method == 'POST':
-        user_input = request.POST.get('message', '')  # Get the message from the POST request
+        user_input = request.POST.get('message', '')  # message from the POST request
         
-        if user_input:  # Ensure there's a message from the user
+        if user_input:  # Ensuring there's a message from the user
             # Call the Azure OpenAI function to get the response
             response_text = get_openai_response(user_input)
             return JsonResponse({'response': response_text})  # Send back the OpenAI response
         
         else:
-            # If no message was provided, return an error
+            # If no message was provided, return a message error
             return JsonResponse({'error': 'No message provided'}, status=400)
 
     # If the request method is not POST, return a method error
