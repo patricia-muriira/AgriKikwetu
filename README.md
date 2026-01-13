@@ -43,6 +43,7 @@ The bot supports a wide range of local and international languages to ensure inc
 * **Dholuo:** `luo_Latn`
 * **Hindi:** `hin_Deva`
 
+NLLB model - facebook/nllb-200-distilled-600M
 * More languages can be added by editing the language codes file and the router logic. These were the Kenyan languages available as of April 2025
 ---
 
