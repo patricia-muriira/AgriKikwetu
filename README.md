@@ -43,7 +43,7 @@ The bot supports a wide range of local and international languages to ensure inc
 * **Dholuo:** `luo_Latn`
 * **Hindi:** `hin_Deva`
 
-* More languages can be added by editing the language codes file and the router logic. These were the Kenyan languages available as of 2025
+* More languages can be added by editing the language codes file and the router logic. These were the Kenyan languages available as of April 2025
 ---
 
 ##  Tech Stack
@@ -53,39 +53,148 @@ The bot supports a wide range of local and international languages to ensure inc
 * **Translation Engines:** Azure Translate & NLLB with a custom routing engine
 * **Conversational AI:** Azure OpenAI
 * **Inference:** Disease Detection Vision Model[1]
+---
+  
+## Modular Architecture & Extensibility
+The system is designed with a separation between the Intelligence Engine and the Communication Interface. This modularity ensures that the backend can be plugged into any frontend or endpoint, not just Telegram.
+
+Decoupled Components
+Standalone Backend (Agri_Kikwetu): A centralized Django service that handles translation, intent classification, and disease detection. It is completely independent of the chatbot's UI.
+
+Independent Bot Client (Telegram_bot): A standalone module that communicates with the backend. This can be easily replaced or supplemented with other interfaces.
 
 ---
+## Project Structure
+```
+AgriKikwetu
+├──Agri_Kikwetu
+│   ├──django
+│   │   └──agrisupport
+│   │   │   ├──agrisupport
+│   │   │   │   ├──__init__.py
+│   │   │   │   ├──asgi.py
+│   │   │   │   ├──settings.py
+│   │   │   │   ├──urls.py
+│   │   │   │   └──wsgi.py
+│   │   │   ├──intent_recognition           ## Intent recognition and classification
+│   │   │   │   ├──migrations
+│   │   │   │   │   └──__init__.py
+│   │   │   │   ├──__init__.py
+│   │   │   │   ├──admin.py
+│   │   │   │   ├──apps.py
+│   │   │   │   ├──models.py
+│   │   │   │   ├──tests.py
+│   │   │   │   ├──urls.py
+│   │   │   │   ├──utils.py
+│   │   │   │   └──views.py
+│   │   │   ├──plant_disease                ## Crop disease detection handling
+│   │   │   │   ├──migrations
+│   │   │   │   │   ├──__init__.py
+│   │   │   │   │   └──0001_initial.py
+│   │   │   │   ├──__init__.py
+│   │   │   │   ├──admin.py
+│   │   │   │   ├──apps.py
+│   │   │   │   ├──models.py
+│   │   │   │   ├──serializers.py
+│   │   │   │   ├──tests.py
+│   │   │   │   ├──urls.py
+│   │   │   │   └──views.py
+│   │   │   ├──templates                   ## Defines the image upload template
+│   │   │   │   └──plant_disease
+│   │   │   │   │   └──upload.html
+│   │   │   ├──translation
+│   │   │   │   ├──azure_translator.py     ## Azure translate engine
+│   │   │   │   ├──language_codes.py       ## Contains the supported language codes (can be modifies to support more languages)
+│   │   │   │   ├──language_detector.py    ## Detects original input language
+│   │   │   │   ├──nllb_translator.py      ## Meta NLLB (No language left Behind) engine
+│   │   │   │   ├──translation_routes.py   ## routes translation tasks to the translation engines
+│   │   │   │   ├──urls.py
+│   │   │   │   └──views.py                ## Contains overall system logic
+│   │   │   ├──config.yml
+│   │   │   ├──db.sqlite3
+│   │   │   └──manage.py
+│   ├──models
+│   │   ├──variables
+│   │   │   ├──variables.data-00000-of-00001
+│   │   │   └──variables.index
+│   │   └──saved_model.pb                   ## Crop disease dtection model
+│   ├──freezeviews.py
+│   ├──requirements.txt                     ## Requirements file
+│   └──.gitignore
+├──Telegram_bot                             ## Connects the system to the telegram bot interface
+│   ├──bot.py                               ## Chatbot logic 
+│   ├──None
+│   ├──requirements.txt                     ## Requirements file for telegram bot integration
+│   └──.gitignore
+└──README.md
+```
+---
+## 🛠️ Setup and Installation
 
-## Setup & Installation
+The system is split into two independent components. You must configure and run the backend engine (Part A) before starting the communication interface (Part B).
 
-1. **Clone the Repo**
+### **Part A: The Agri-Support Engine (Backend)**
+
+This contains the Django server, NLLB/Azure translation logic, and the disease detection model.
+
+1. **Navigate to the Django Root:**
 ```bash
-git clone https://github.com/patricia-muriira/AgriKikwetu.git
-cd AgriKikwetu
+cd AgriKikwetu-main/Agri_Kikwetu/django/agrisupport
+
+```
+2. **Environment Configuration:**
+Create a `.env` file in this directory and add your credentials:
+```env
+AZURE_TRANSLATE_KEY=your_key
+AZURE_OPENAI_KEY=your_key
+AZURE_ENDPOINT=your_endpoint
+
+```
+3. **Install Dependencies:**
+*(Note: Use the requirements file located in the Agri_Kikwetu root)*
+```bash
+pip install -r ../../requirements.txt
 
 ```
 
+4. **Initialize & Launch django server:**
+```bash
+python manage.py migrate
+python manage.py runserver
 
-2. **Install Requirements**
+```
+---
+
+### **Part B: The Telegram Interface (Frontend)**
+
+This is the standalone client that connects users to the backend.
+*(Note: The backend can be connected to any other frontend not necessarily Telegram)*
+
+1. **Navigate to the Bot Directory:**
+```bash
+cd AgriKikwetu-main/Telegram_bot
+
+```
+
+2. **Install Interface Dependencies:**
+*(Note: Use the requirements file located in the Telegram_bot root)*
+
 ```bash
 pip install -r requirements.txt
 
 ```
-
-
-3. **Environment Configuration**
-Create a `.env` file and add your credentials:
+3. **Configure Bot Token in env file:**
+Ensure your `TELEGRAM_TOKEN` is set (create one using telegram bot father) .
 ```env
-TELEGRAM_BOT_TOKEN=your_token
 AZURE_TRANSLATE_KEY=your_key
-AZURE_OPENAI_KEY=your_openai_key
-AZURE_OPENAI_ENDPOINT=your_endpoint
-WEATHER_API_KEY=your_weather_api_key
-** not exhaustive
 ```
 
----
+5. **Launch the Bot:**
+```bash
+python bot.py
 
+```
+---
 ##  Feature Usage
 
 * **Disease Analysis:** Send a photo of a crop. The bot will identify the disease and provide treatment steps in your local language.
