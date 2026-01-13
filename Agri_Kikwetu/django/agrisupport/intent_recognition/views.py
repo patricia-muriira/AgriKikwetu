@@ -31,7 +31,7 @@ def handle_intent(request):
 
                 try:
                     response = requests.get(url)
-                    response.raise_for_status()  # Raise an exception for bad status codes
+                    response.raise_for_status()  # exception for bad status codes
                     data = response.json()
 
                     if "error" in data:
@@ -45,7 +45,7 @@ def handle_intent(request):
                         "wind_speed": data["current"]["wind_kph"],
                     }
 
-                    # Assuming get_openai_response is defined elsewhere
+                    
                     openai_input = f"Here is a weather report for {city}: {weather_info}. It indicates the temperature, condition,humidity, and wind speed. Provide a concise, to the point, natural-sounding summary with recommendations in point-form as to how this can affect farming."
                     openai_response = get_openai_response(openai_input)
 
