@@ -25,21 +25,21 @@
 #                 messages=[{"role": "user", "content": user_prompt}],
 #                 max_completion_tokens=500, 
 #             )
-#             print("🔍 Detected language response:", response)  # Debugging
+#             print("Detected language response:", response)  # Debugging
 
 #             detected_language = response.choices[0].message.content.strip().lower()
 #             return detected_language
         
 #         except openai.error.RateLimitError:
-#             print(f"💥 Rate limit reached. Retry {attempt + 1}/{max_retries}...")
+#             print(f" Rate limit reached. Retry {attempt + 1}/{max_retries}...")
 #             time.sleep(2 ** attempt)  # Exponential backoff
 
 #         except openai.error.APIError as e:
-#             print(f"💥 API error: {e}. Retry {attempt + 1}/{max_retries}...")
+#             print(f"API error: {e}. Retry {attempt + 1}/{max_retries}...")
 #             time.sleep(2 ** attempt)  # Exponential backoff
 
 #         except Exception as e:
-#             print(f"💥 Unknown error during language detection: {e}")
+#             print(f" Unknown error during language detection: {e}")
 #             break
 
 #     return "unknown"
@@ -75,9 +75,9 @@ def detect_language_with_openai(text, max_retries=3):
             max_completion_tokens=8000,
         )
         
-        print("🔍 Detected language response:", response)  
+        print("Detected language response:", response)  
         return response.choices[0].message.content.strip().lower()
 
     except Exception as e:
-        print(f"💥 Language detection error: {e}")
+        print(f"Language detection error: {e}")
         return "unknown"
