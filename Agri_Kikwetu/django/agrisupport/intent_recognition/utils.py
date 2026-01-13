@@ -21,7 +21,7 @@ def classify_intent(text):
             messages=[{"role": "user", "content": prompt}],
             max_completion_tokens=5000
         )
-        print("🔍 Intent Response:", response)
+        print("Intent Response:", response)
         return response.choices[0].message.content.strip()
     except Exception as e:
         print(f"💥 Intent classification error: {e}")
@@ -41,9 +41,9 @@ def extract_city(text):
             messages=[{"role": "user", "content": prompt}],
             max_completion_tokens=7000
         )
-        print("🌍 City Extraction Response:", response)
+        print("City Extraction Response:", response)
         city = response.choices[0].message.content.strip()
         return None if city.lower() == "none" else city
     except Exception as e:
-        print(f"💥 City extraction error: {e}")
+        print(f"City extraction error: {e}")
         return None
