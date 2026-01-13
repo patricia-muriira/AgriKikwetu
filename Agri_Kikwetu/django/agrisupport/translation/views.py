@@ -10,7 +10,9 @@ from .translation_routes import translate_input, translate_back
 from intent_recognition.utils import classify_intent, extract_city
 from django.views.decorators.csrf import csrf_exempt
 
-# Load the pre-trained model globally.
+# Load the pre-trained model globally. 
+#The model was sourced from Kaggle under plant village dataset
+
 MODEL_PATH = 'C:\\Users\\HP\\Desktop\\Project\\Agri_Kikwetu\\models'
 model = tf.saved_model.load(MODEL_PATH)
 predict_fn = model.signatures["serving_default"]
@@ -50,6 +52,21 @@ def handle_translation_and_intent(request):
     original_lang = "en"
     translator_used = "None"
 
+
+    """ System summary
+    -Default language is English if the image is provided without any text
+    The handle_translation_and intent function runs the entire system logic
+    
+    0. User sends query via chatbot endpoint
+     NB: User input can be in two formats: text and image
+    1. Text is translated if present and if translation is applicable
+    2. Text intent is classified 
+    3. The intent is handled (directed to the relevant views)
+    4. If an image file is provided, the disease detection model runs inference and returns a class. Azure OpenAI augments the response to be conversational
+    5. If original language wasn't English, the text is translated back to it's original language
+    6. Response is constructed and fed to the chatbot endpoint
+    """ 
+    
     # Step 1: Translate the text if present
     if user_input:
         translation_result = translate_input(user_input)
@@ -147,9 +164,8 @@ def handle_translation_and_intent(request):
     })
 
 def process_image(image_file):
-    """
-    Process the uploaded image and return the predicted class name.
-    """
+
+   #Process the uploaded image and return the predicted class name.
     from io import BytesIO
     img_io = BytesIO(image_file.read())
     img_io.seek(0)
