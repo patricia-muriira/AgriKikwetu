@@ -143,12 +143,28 @@ cd AgriKikwetu-main/Agri_Kikwetu/django/agrisupport
 
 ```
 2. **Environment Configuration:**
-Create a `.env` file in this directory and add your credentials:
-```env
-AZURE_TRANSLATE_KEY=your_key
-AZURE_OPENAI_KEY=your_key
-AZURE_ENDPOINT=your_endpoint
+Create a `.env` file in the `AgriKikwetu-main/Agri_Kikwetu/django/agrisupport` directory:
 
+```env
+# Django Settings
+SECRET_KEY=your_secret_key
+
+# Azure Translator Settings
+AZURE_TRANSLATOR_KEY=your_key
+AZURE_TRANSLATOR_REGION=your_region
+AZURE_TRANSLATOR_ENDPOINT=your_endpoint
+AZURE_TRANSLATE_API_VERSION=version_in_use
+
+# Weather API Settings
+WEATHER_API_KEY=your_weather_key
+
+# Azure OpenAI Settings
+OPENAI_API_KEY=your_key
+OPENAI_API_ENDPOINT=your_endpoint
+OPENAI_REGION=your_region
+OPENAI_API_TYPE=azure
+OPENAI_API_VERSION=version_in_use
+OPENAI_DEPLOYMENT_NAME=your_deployment_name
 ```
 3. **Install Dependencies:**
 *(Note: Use the requirements file located in the Agri_Kikwetu root)*
@@ -183,10 +199,15 @@ cd AgriKikwetu-main/Telegram_bot
 pip install -r requirements.txt
 
 ```
-3. **Configure Bot Token in env file:**
-Ensure your `TELEGRAM_TOKEN` is set (create one using telegram bot father) .
+
+3. **Configure .env file:**
+Create a `.env` file in the `AgriKikwetu-main/Telegram_bot` directory(for modularity).
 ```env
-AZURE_TRANSLATE_KEY=your_key
+# Telegram Credentials
+TELEGRAM_TOKEN =your_telegram_bot_token
+
+# Connection to Backend
+DJANGO_BACKEND_URL= your_url #http://127.0.0.1:port_number if local
 ```
 
 5. **Launch the Bot:**
@@ -198,7 +219,7 @@ python bot.py
 ##  Feature Usage
 
 * **Disease Analysis:** Send a photo of a crop. The bot will identify the disease and provide treatment steps in your local language.
-* **Weather Updates:** Ask "What is the weather like today in <city> ?" to receive local forecasts. Default city is Nairobi
+* **Weather Updates:** Ask "What is the weather like today in *city* ?" to receive local forecasts. Default city is Nairobi
 * **Farming Advice:** Ask questions like "When should I plant maize?" or "How do I manage pests?" for localized agricultural guidance.
 
 **Model Source:** 
