@@ -226,3 +226,7 @@ python bot.py
 **Model Source:** 
 1. [Plant Disease Detection Model](https://www.kaggle.com/models/rishitdagli/plant-disease) by [Rishit Dagli](https://github.com/Rishit-dagli). 
 Based on the **PlantVillage Dataset** by Hughes et al.
+
+## FUN FACT 
+Kikwetu is a Swahili word which means "our way" / "the way of our home".
+Agri-Kikwetu is a solution tailored to the local Kenyan context
